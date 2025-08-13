@@ -20,4 +20,7 @@ int main()
     } catch(std::runtime_error& err) {
 	std::cout << err.what() << '\n';
     }
+
+    std::cout << sizeof(vkw::Instance) << ' ' << sizeof(VkInstance) << '\n';
+    std::cout << vkw::Instance::hasDestroyDependency << '\n';
 }
