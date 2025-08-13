@@ -18,7 +18,7 @@ struct VulkanStructWrapper : T
 
     // Allows designated initializers by doing ({ ... }). Can't do {...} though.
     // Not using designated initializers inside ({ ... }) would require setting sType
-    VulkanStructWrapper(T&& rhs = {}) : T{std::forward<T>(rhs)} { rhs.sType = sType; }
+    VulkanStructWrapper(T&& rhs = {}) : T{std::forward<T>(rhs)} { this->sType = sType; }
 };
 
 }
