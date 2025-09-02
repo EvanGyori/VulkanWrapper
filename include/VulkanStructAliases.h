@@ -4,6 +4,8 @@
 namespace vkw
 {
 
+using DebugUtilsMessengerCreateInfoEXT = VulkanStructWrapper<VkDebugUtilsMessengerCreateInfoEXT, VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT>;
+
 using ApplicationInfo = VulkanStructWrapper<VkApplicationInfo, VK_STRUCTURE_TYPE_APPLICATION_INFO>;
 using InstanceCreateInfo = VulkanStructWrapper<VkInstanceCreateInfo, VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO>;
 using DeviceQueueCreateInfo = VulkanStructWrapper<VkDeviceQueueCreateInfo, VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO>;
