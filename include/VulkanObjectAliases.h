@@ -15,7 +15,37 @@ namespace vkw
 {
 
 VKW_RAII_WRAPPER(Instance, VkInstance, vkCreateInstance, vkDestroyInstance);
+// VkPhysicalDevice - obtained differently, no destruction needed
+VKW_RAII_WRAPPER(Device, VkDevice, vkCreateDevice, vkDestroyDevice);
+// VkQueue - obtained differently, no destruction needed
+VKW_RAII_WRAPPER(Semaphore, VkSemaphore, vkCreateSemaphore, vkDestroySemaphore);
+// Command Buffer - allocated in groups, freed individually or by pool
+VKW_RAII_WRAPPER(Fence, VkFence, vkCreateFence, vkDestroyFence);
+VKW_RAII_WRAPPER(DeviceMemory, VkDeviceMemory, vkAllocateMemory, vkFreeMemory);
+VKW_RAII_WRAPPER(Buffer, VkBuffer, vkCreateBuffer, vkDestroyBuffer);
+VKW_RAII_WRAPPER(Image, VkImage, vkCreateImage, vkDestroyImage);
+VKW_RAII_WRAPPER(Event, VkEvent, vkCreateEvent, vkDestroyEvent);
+VKW_RAII_WRAPPER(QueryPool, VkQueryPool, vkCreateQueryPool, vkDestroyQueryPool);
+VKW_RAII_WRAPPER(BufferView, VkBufferView, vkCreateBufferView, vkDestroyBufferView);
+VKW_RAII_WRAPPER(ImageView, VkImageView, vkCreateImageView, vkDestroyImageView);
+VKW_RAII_WRAPPER(ShaderModule, VkShaderModule, vkCreateShaderModule, vkDestroyShaderModule);
+VKW_RAII_WRAPPER(PipelineCache, VkPipelineCache, vkCreatePipelineCache, vkDestroyPipelineCache);
+VKW_RAII_WRAPPER(PipelineLayout, VkPipelineLayout, vkCreatePipelineLayout, vkDestroyPipelineLayout);
+VKW_RAII_WRAPPER(RenderPass, VkRenderPass, vkCreateRenderPass, vkDestroyRenderPass);
+// VkPipeline - created in groups and has multiple create functions
+VKW_RAII_WRAPPER(DescriptorSetLayout, VkDescriptorSetLayout, vkCreateDescriptorSetLayout, vkDestroyDescriptorSetLayout);
+VKW_RAII_WRAPPER(Sampler, VkSampler, vkCreateSampler, vkDestroySampler);
+VKW_RAII_WRAPPER(DescriptorPool, VkDescriptorPool, vkCreateDescriptorPool, vkDestroyDescriptorPool);
+// VkDescriptorSet - allocated in groups, freed individually or by pool
+VKW_RAII_WRAPPER(Framebuffer, VkFramebuffer, vkCreateFramebuffer, vkDestroyFramebuffer);
+VKW_RAII_WRAPPER(CommandPool, VkCommandPool, vkCreateCommandPool, vkDestroyCommandPool);
 
 VKW_RAII_WRAPPER_INSTANCE_EXTENSION(DebugUtilsMessengerEXT, VkDebugUtilsMessengerEXT, vkCreateDebugUtilsMessengerEXT, vkDestroyDebugUtilsMessengerEXT);
+
+#ifdef GLFW_TRUE
+VKW_RAII_WRAPPER(SurfaceKHR, VkSurfaceKHR, glfwCreateWindowSurface, vkDestroySurfaceKHR);
+#endif
+
+VKW_RAII_WRAPPER(SwapchainKHR, VkSwapchainKHR, vkCreateSwapchainKHR, vkDestroySwapchainKHR);
 
 }
