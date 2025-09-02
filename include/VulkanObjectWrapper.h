@@ -26,14 +26,53 @@ template<auto DestroyFunc>
 class DestroyDependencyBase<DestroyFunc, true>
 {
 protected:
+    using DependencyType = NthParam<DestroyFunc, 0>;
+
     static constexpr bool hasDestroyDependency = true;
-    NthParam<DestroyFunc, 0> destroyDependency;
+    DependencyType destroyDependency;
+
+    DestroyDependencyBase() : destroyDependency(nullptr) {}
+
+    DestroyDependencyBase(DestroyDependencyBase&& rhs) : destroyDependency(rhs.destroyDependency)
+    {
+	rhs.destroyDependency = nullptr;
+    }
+
+    DestroyDependencyBase& operator=(DestroyDependencyBase&& rhs)
+    {
+	DependencyType temp = destroyDependency;
+	destroyDependency = rhs.destroyDependency;
+	rhs.destroyDependency = temp;
+
+	return *this;
+    }
 };
 
 template<typename T, auto DestroyFunc>
 class VulkanObjectWrapperBase : public DestroyDependencyBase<DestroyFunc>
 {
 public:
+    VulkanObjectWrapperBase(const VulkanObjectWrapperBase&) = delete;
+    VulkanObjectWrapperBase& operator=(const VulkanObjectWrapperBase&) = delete;
+
+    VulkanObjectWrapperBase(VulkanObjectWrapperBase&& rhs) :
+	DestroyDependencyBase<DestroyFunc>(std::move(rhs)),
+	handle(rhs.handle)
+    {
+	rhs.handle = nullptr;
+    }
+
+    VulkanObjectWrapperBase& operator=(VulkanObjectWrapperBase&& rhs)
+    {
+	DestroyDependencyBase<DestroyFunc>::operator=(std::move(rhs));
+
+	T temp = handle;
+	handle = rhs.handle;
+	rhs.handle = temp;
+
+	return *this;
+    }
+
     operator T()
     {
 	return handle;
@@ -76,10 +115,12 @@ public:
 		}
 	    }
 	}
+
+	InnerHelper(InnerHelper&&) = default;
+	InnerHelper& operator=(InnerHelper&&) = default;
     };
 };
 
-// Holy moly
 template<typename T, auto CreateFunc, auto DestroyFunc, const char* TypeName>
 using VulkanObjectWrapper = ApplyRemoveLastNFunctionParams<CreateFunc, 2, VulkanObjectWrapperHelper<T, CreateFunc, DestroyFunc, TypeName>::template InnerHelper>;
 
@@ -112,6 +153,9 @@ public:
 		destroyFunc(this->destroyDependency, this->handle, nullptr);
 	    }
 	}
+
+	InnerHelper(InnerHelper&&) = default;
+	InnerHelper& operator=(InnerHelper&&) = default;
     };
 };
 

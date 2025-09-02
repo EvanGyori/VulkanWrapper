@@ -118,6 +118,7 @@ public:
     };
 };
 
+// Holy moly
 template<auto Func, size_t N, template<typename...> class T>
 using ApplyRemoveLastNFunctionParams =
     FunctionTraits<Func>::ParamPack::

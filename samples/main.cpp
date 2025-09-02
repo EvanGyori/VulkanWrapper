@@ -83,7 +83,7 @@ void run()
     std::vector<const char*> extensions { "VK_EXT_debug_utils" };
 
     vkw::InstanceCreateInfo createInfo({
-	.pNext = &debuggerInfo,
+	//.pNext = &debuggerInfo,
 	.pApplicationInfo = &appInfo,
 	.enabledExtensionCount = static_cast<uint32_t>(extensions.size()),
 	.ppEnabledExtensionNames = extensions.data()
