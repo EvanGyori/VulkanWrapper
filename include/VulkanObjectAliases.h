@@ -1,3 +1,19 @@
+/*
+ * List of Vulkan object RAII wrappers currently available.
+ *
+ * Provides only move semantics, no copying. Pass nullptr into the constructor to default
+ * with the handle being nullptr. Otherwise pass into the constructor the same parameters
+ * used in its appropiate vkCreate function (minus the last two parameters).
+ *
+ * To add another one, use the VKW_RAII_WRAPPER macro. If
+ * the create and/or destroy functions require using
+ * vkGetInstanceProcAddr (with VkDebugUtilsMessengerEXT for example),
+ * use the VKW_RAII_WRAPPER_INSTANCE_EXTENSION macro
+ *
+ * include GLFW before including VulkanWrapper.h to get the surface
+ * RAII wrapper
+ */
+
 #pragma once
 #include "VulkanObjectWrapper.h"
 
@@ -5,6 +21,8 @@
     constexpr const char Type ## _name[] = #Type ;\
     using Alias = VulkanObjectWrapper<Type, CreateFunc, DestroyFunc, Type ## _name>
 
+// Use when the object's create and destroy functions need to be obtained
+// through vkGetInstanceProcAddr
 #define VKW_RAII_WRAPPER_INSTANCE_EXTENSION(Alias, Type, CreateFunc, DestroyFunc) \
     constexpr const char Type ## _name[] = #Type ;\
     constexpr const char CreateFunc ## _name[] = #CreateFunc ;\

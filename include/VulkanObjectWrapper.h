@@ -1,8 +1,9 @@
+/*
+ * The template disaster for the RAII wrapper class for Vulkan objects
+ */
+
 #pragma once
 
-#include <utility>
-#include <tuple>
-#include <type_traits>
 #include <cstddef>
 
 #include <vulkan/vulkan.h>
@@ -89,7 +90,7 @@ class VulkanObjectWrapperHelper
 {
 public:
     // In order to get the create parameters from CreateFunc with the last two removed,
-    // some template tricks need to be done.
+    // the parameter pack needs to be isolated from the other template parameters
     template<typename... CreateParams>
     class InnerHelper : public VulkanObjectWrapperBase<T, DestroyFunc>
     {

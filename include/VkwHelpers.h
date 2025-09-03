@@ -1,3 +1,15 @@
+/*
+ * Provides helper stuff for the meat of the library
+ *
+ * In order to manipulate template parameter packs and pass them to another
+ * class, the Apply alias templates can be used recursively. First specify
+ * the types to use for the pack. So FunctionsTraits<Func>::ParamPack and
+ * then use the Apply<T> alias where T is any class with only one template
+ * parameter which is typename..., now the resulting type is T<Function parameters...>.
+ * To apply other pack manipulations put ReverseTypes::Pack in place of T.
+ * Then ::Apply<...> after the first Apply<...>.
+ */
+
 #pragma once
 
 #include <tuple>
@@ -6,7 +18,7 @@ namespace vkw
 {
 
 template<size_t N, typename... T>
-using NthType = std::tuple_element_t<N, std::tuple<T...>>; //std::remove_reference_t<decltype(std::get<N>(std::declval<std::tuple<T...>>()))>;
+using NthType = std::tuple_element_t<N, std::tuple<T...>>;
 
 template<auto Func, typename FuncType = decltype(Func)>
 class FunctionTraits;
@@ -24,7 +36,7 @@ public:
     {
     public:
 	template<template<typename...> class T>
-	using apply = T<ParamTypes...>;
+	using Apply = T<ParamTypes...>;
     };
 };
 
@@ -59,7 +71,7 @@ public:
     {
     public:
 	template<template<typename...> class T>
-	using apply = typename RemoveFirstN<N - 1>::template Pack<Types...>::template apply<T>;
+	using Apply = typename RemoveFirstN<N - 1>::template Pack<Types...>::template Apply<T>;
     };
 };
 
@@ -72,7 +84,7 @@ public:
     {
     public:
 	template<template<typename...> class T>
-	using apply = T<Types...>;
+	using Apply = T<Types...>;
     };
 };
 
@@ -95,7 +107,7 @@ public:
 	    {
 	    public:
 		template<template<typename...> class T>
-		using apply = typename Helper<Forward...>::template InnerHelper<First, Backward...>::template apply<T>;
+		using Apply = typename Helper<Forward...>::template InnerHelper<First, Backward...>::template Apply<T>;
 	    };
 	};
 
@@ -108,13 +120,13 @@ public:
 	    {
 	    public:
 		template<template<typename...> class T>
-		using apply = T<Backward...>;
+		using Apply = T<Backward...>;
 	    };
 	};
 
     public:
 	template<template<typename...> class T>
-	using apply = typename Helper<Types...>::template InnerHelper<>::template apply<T>;
+	using Apply = typename Helper<Types...>::template InnerHelper<>::template Apply<T>;
     };
 };
 
@@ -122,9 +134,9 @@ public:
 template<auto Func, size_t N, template<typename...> class T>
 using ApplyRemoveLastNFunctionParams =
     FunctionTraits<Func>::ParamPack::
-    template apply<ReverseTypes::Pack>::
-    template apply<RemoveFirstN<N>::template Pack>::
-    template apply<ReverseTypes::Pack>::
-    template apply<T>;
+    template Apply<ReverseTypes::Pack>::
+    template Apply<RemoveFirstN<N>::template Pack>::
+    template Apply<ReverseTypes::Pack>::
+    template Apply<T>;
 
 }

@@ -2,8 +2,7 @@
 #include <vector>
 #include <type_traits>
 
-#include "VulkanStructAliases.h"
-#include "VulkanObjectAliases.h"
+#include "VulkanWrapper.h"
 
 static const char* getMessageSeverityString(VkDebugUtilsMessageSeverityFlagBitsEXT severityFlag)
 {

@@ -1,3 +1,11 @@
+/*
+ * Very simple wrapper for Vulkan structures that auto sets sType and can be used
+ * as normal after construction
+ *
+ * Once C++ adds compile-time reflection, (...) without designated initializers
+ * could be used instead of ({...}) with designated initializers
+ */
+
 #pragma once
 
 #include <utility>
@@ -18,7 +26,7 @@ struct VulkanStructWrapper : T
 
     // Allows designated initializers by doing ({ ... }). Can't do {...} though.
     // Not using designated initializers inside ({ ... }) would require setting sType
-    VulkanStructWrapper(T&& rhs = {}) : T{std::forward<T>(rhs)} { this->sType = sType; }
+    VulkanStructWrapper(T&& rhs = {}) : T{std::forward<T>(rhs)} { this->sType = sType; } // forward may be unnecessary
 };
 
 }
