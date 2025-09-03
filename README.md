@@ -16,7 +16,7 @@ In order to increase compile-time speed, I used templates so that essentially co
 
 ## Usage
 
-Make sure you program has access to all the files in `include` and include `VulkanWrapper.h`. I could create a single-file-include if needed.
+Make sure your program has access to all the files in `include` and then include the file `VulkanWrapper.h`. I could create a single-file-header if needed.
 
 ### Vulkan Structure Aliases
 
