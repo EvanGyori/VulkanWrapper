@@ -20,10 +20,10 @@ namespace vkw
 {
 
 #ifndef VKW_CHECK
-inline void checkResult(VkResult result, const char* file, const char* line)
+inline void checkResult(VkResult result, const char* file, int line)
 {
     if (result < VK_SUCCESS) {
-	throw std::runtime_error(std::string("VKW ERROR: in ") + file + " at line " + line + ". Result code: " + std::to_string(result));
+	throw std::runtime_error(std::string("VKW ERROR: in ") + file + " at line " + std::to_string(line) + ". Result code: " + std::to_string(result));
     }
 }
 
