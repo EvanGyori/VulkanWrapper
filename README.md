@@ -12,7 +12,7 @@ In order to increase compile-time speed, I used templates so that essentially co
 
 - Requires C++20 but I should be able to add support for as low as C++11 if I feel like it.
 - I only added struct and RAII object aliases for the most commonly used stuff. To add support for certain extensions, look at `include/VulkanStructAliases.h` or `include/VulkanObjectAliases.h`.
-- You either must initialize the Vulkan struct aliases using designated initializers or set the members after using the default constructor. See [Usage](#usage) for more info. This will change once I get my hands on C++26's compile-time reflection.
+- You must either initialize the Vulkan struct aliases using designated initializers or set the members after using the default constructor. See [Usage](#usage) for more info. This will change once I get my hands on C++26's compile-time reflection.
 
 ## Usage
 
