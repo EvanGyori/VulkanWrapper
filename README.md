@@ -2,7 +2,7 @@
 
 A faster and more bare bones alternative to vulkan.hpp!
 
-Provides RAII wrappers, struct aliases that auto-set sType, and error handling macros.
+Provides RAII wrappers, struct aliases that auto-set sType, shortcut for enumerating arrays, and error handling macros.
 
 vulkan.hpp does all this and more but it has two flaws: VERY long compilation times and I found myself scrolling through their huge header files too much. These problems can be solved easily using pre-compiled headers and auto-complete but screw it, I want simplicity, here I am (please don't look at the template code).
 
@@ -64,6 +64,25 @@ To have the RAII object hold nothing do:
 vkw::Instance instance(nullptr);
 ```
 
+### Shortcut for Enumerating Arrays
+
+Instead of the usual:
+
+```C++
+uint32_t count;
+vkEnumeratePhysicalDevices(instance, &count, nullptr);
+std::vector<VkPhysicalDevice> physicalDevices(count);
+vkEnumeratePhysicalDevices(instance, &count, elements.data());
+```
+
+You can do:
+
+```C++
+std::vector<VkPhysicalDevice> physicalDevices = vkw::enumeratePhysicalDevices(instance);
+```
+
+The same applies for all functions that match that scheme of first getting the number of elements, then getting the elements.
+
 ### Error Handling
 
 Wrap Vulkan function calls with the `VKW_CHECK` macro to throw an std::runtime_error if the returned VkResult is a nono. To override error handling, define VKW_CHECK(result) before including `VulkanWrapper.h`.
@@ -73,3 +92,7 @@ If an object fails to be created inside an RAII object, a std::runtime_error wil
 ```C++
 VKW_CHECK(vkEndCommandBuffer(commandBuffer));
 ```
+
+### Use everything else as normal
+
+Just use Vulkan as normal except only replacing vk with vkw:: if you want some special functionality, otherwise keep vk at the front of each function call. The vkw structs and RAII wrappers can be mingled with the non-vkw stuff.
