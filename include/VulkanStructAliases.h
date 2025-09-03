@@ -4,6 +4,8 @@
  * sType is auto set to the proper enum value. All other usage is exactly the same
  * except for construction. Either use designated initializers inside ({ .pNext = nullptr, .foo = bar, ...}) for the
  * constructor or use the default constructor and initialize the values after.
+ *
+ * To add another alias for an extension structure, follow the examples below
  */
 
 #pragma once
