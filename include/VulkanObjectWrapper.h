@@ -122,6 +122,7 @@ public:
     };
 };
 
+// Used for all objects except for some special case scenarios covered below (doesn't fit the pattern)
 template<typename T, auto CreateFunc, auto DestroyFunc, const char* TypeName>
 using VulkanObjectWrapper = ApplyRemoveLastNFunctionParams<CreateFunc, 2, VulkanObjectWrapperHelper<T, CreateFunc, DestroyFunc, TypeName>::template InnerHelper>;
 
@@ -160,7 +161,34 @@ public:
     };
 };
 
+// Used when the create and/or destroy functions must be obtained by vkGetInstanceProcAddr
 template<typename T, auto CreateFunc, typename CreateFuncType, const char* CreateFuncName, auto DestroyFunc, typename DestroyFuncType, const char* DestroyFuncName, const char* TypeName>
 using VulkanObjectWrapperInstanceExtension = ApplyRemoveLastNFunctionParams<CreateFunc, 2, VulkanObjectWrapperInstanceExtensionHelper<T, CreateFunc, CreateFuncType, CreateFuncName, DestroyFunc, DestroyFuncType, DestroyFuncName, TypeName>::template InnerHelper>;
+
+// Used when the create function is ambiguous, so instead the handle is passed in to the RAII object after the handle's creation
+template<typename T, auto DestroyFunc>
+class VulkanObjectWrapperNoCreateFunc : public VulkanObjectWrapperBase<T, DestroyFunc>
+{
+public:
+    static_assert(VulkanObjectWrapperBase<T, DestroyFunc>::hasDestroyDependency, "VulkanObjectWrapperNoCreateFunc currently only supports objects with three destroy function parameters, aka it has a destroy dependency");
+
+    VulkanObjectWrapperNoCreateFunc(nullptr_t) {}
+
+    VulkanObjectWrapperNoCreateFunc(VulkanObjectWrapperBase<T, DestroyFunc>::DependencyType destroyDependency, T handle)
+    {
+	this->destroyDependency = destroyDependency;
+	this->handle = handle;
+    }
+
+    ~VulkanObjectWrapperNoCreateFunc()
+    {
+	if (this->handle != nullptr) {
+	    DestroyFunc(this->destroyDependency, this->handle, nullptr);
+	}
+    }
+
+    VulkanObjectWrapperNoCreateFunc(VulkanObjectWrapperNoCreateFunc&&) = default;
+    VulkanObjectWrapperNoCreateFunc& operator=(VulkanObjectWrapperNoCreateFunc&&) = default;
+};
 
 }

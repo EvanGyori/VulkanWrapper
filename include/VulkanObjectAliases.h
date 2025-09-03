@@ -50,7 +50,8 @@ VKW_RAII_WRAPPER(ShaderModule, VkShaderModule, vkCreateShaderModule, vkDestroySh
 VKW_RAII_WRAPPER(PipelineCache, VkPipelineCache, vkCreatePipelineCache, vkDestroyPipelineCache);
 VKW_RAII_WRAPPER(PipelineLayout, VkPipelineLayout, vkCreatePipelineLayout, vkDestroyPipelineLayout);
 VKW_RAII_WRAPPER(RenderPass, VkRenderPass, vkCreateRenderPass, vkDestroyRenderPass);
-// VkPipeline - created in groups and has multiple create functions
+// Since creation is ambiguous, create beforehand and pass device and the created pipeline into constructor
+using Pipeline = VulkanObjectWrapperNoCreateFunc<VkPipeline, vkDestroyPipeline>;
 VKW_RAII_WRAPPER(DescriptorSetLayout, VkDescriptorSetLayout, vkCreateDescriptorSetLayout, vkDestroyDescriptorSetLayout);
 VKW_RAII_WRAPPER(Sampler, VkSampler, vkCreateSampler, vkDestroySampler);
 VKW_RAII_WRAPPER(DescriptorPool, VkDescriptorPool, vkCreateDescriptorPool, vkDestroyDescriptorPool);
@@ -62,6 +63,8 @@ VKW_RAII_WRAPPER_INSTANCE_EXTENSION(DebugUtilsMessengerEXT, VkDebugUtilsMessenge
 
 #ifdef GLFW_TRUE
 VKW_RAII_WRAPPER(SurfaceKHR, VkSurfaceKHR, glfwCreateWindowSurface, vkDestroySurfaceKHR);
+#else
+using SurfaceKHR = VulkanObjectWrapperNoCreateFunc<VkSurfaceKHR, vkDestroySurfaceKHR>;
 #endif
 
 VKW_RAII_WRAPPER(SwapchainKHR, VkSwapchainKHR, vkCreateSwapchainKHR, vkDestroySwapchainKHR);
