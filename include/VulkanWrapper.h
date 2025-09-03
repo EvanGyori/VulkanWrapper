@@ -6,4 +6,5 @@
 
 #include "VulkanStructAliases.h"
 #include "VulkanObjectAliases.h"
+#include "VulkanGetArrayAliases.h"
 #include "DefaultVkwCheck.h"
