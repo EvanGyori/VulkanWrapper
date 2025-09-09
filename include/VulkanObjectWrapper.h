@@ -32,14 +32,14 @@ protected:
     static constexpr bool hasDestroyDependency = true;
     DependencyType destroyDependency;
 
-    DestroyDependencyBase() : destroyDependency(nullptr) {}
+    DestroyDependencyBase() noexcept : destroyDependency(nullptr) {}
 
-    DestroyDependencyBase(DestroyDependencyBase&& rhs) : destroyDependency(rhs.destroyDependency)
+    DestroyDependencyBase(DestroyDependencyBase&& rhs) noexcept : destroyDependency(rhs.destroyDependency)
     {
 	rhs.destroyDependency = nullptr;
     }
 
-    DestroyDependencyBase& operator=(DestroyDependencyBase&& rhs)
+    DestroyDependencyBase& operator=(DestroyDependencyBase&& rhs) noexcept
     {
 	DependencyType temp = destroyDependency;
 	destroyDependency = rhs.destroyDependency;
@@ -56,14 +56,14 @@ public:
     VulkanObjectWrapperBase(const VulkanObjectWrapperBase&) = delete;
     VulkanObjectWrapperBase& operator=(const VulkanObjectWrapperBase&) = delete;
 
-    VulkanObjectWrapperBase(VulkanObjectWrapperBase&& rhs) :
+    VulkanObjectWrapperBase(VulkanObjectWrapperBase&& rhs) noexcept :
 	DestroyDependencyBase<DestroyFunc>(std::move(rhs)),
 	handle(rhs.handle)
     {
 	rhs.handle = nullptr;
     }
 
-    VulkanObjectWrapperBase& operator=(VulkanObjectWrapperBase&& rhs)
+    VulkanObjectWrapperBase& operator=(VulkanObjectWrapperBase&& rhs) noexcept
     {
 	DestroyDependencyBase<DestroyFunc>::operator=(std::move(rhs));
 
@@ -74,13 +74,13 @@ public:
 	return *this;
     }
 
-    operator T()
+    operator T() noexcept
     {
 	return handle;
     }
 
 protected:
-    VulkanObjectWrapperBase() : handle(nullptr) {}
+    VulkanObjectWrapperBase() noexcept : handle(nullptr) {}
 
     T handle;
 };

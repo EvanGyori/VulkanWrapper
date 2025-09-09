@@ -60,7 +60,6 @@ static VkBool32 VKAPI_PTR debugMessengerCallback(
 
 void run()
 {
-    /*
     vkw::DebugUtilsMessengerCreateInfoEXT debuggerInfo({
 	.messageSeverity =
 	    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
@@ -89,15 +88,15 @@ void run()
 	.ppEnabledExtensionNames = extensions.data()
     });
 
-    vkw::Instance instance(&createInfo);
+    //vkw::Instance instance(&createInfo);
 
-    vkw::DebugUtilsMessengerEXT debugger(instance, &debuggerInfo);
-    */
+    //vkw::DebugUtilsMessengerEXT debugger(instance, &debuggerInfo);
 
-    std::vector<VkExtensionProperties> extensions = vkw::enumerateInstanceExtensionProperties(nullptr);
-    for (auto extension : extensions) {
-	std::cout << extension.extensionName << '\n';
-    }
+    std::vector<vkw::Instance> instances;
+    for (int i = 0; i < 3; ++i)
+	instances.emplace_back(&createInfo);
+
+    std::vector<vkw::Instance> instances2 = std::move(instances);
 }
 
 int main()
