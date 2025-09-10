@@ -47,6 +47,6 @@ public:
 };
 
 template<auto GetFunc>
-const auto& VulkanGetArrayWrapper = ApplyRemoveLastNFunctionParams<GetFunc, 2, VulkanGetArrayWrapperHelper<GetFunc>::template InnerHelper>::get;
+using VulkanGetArrayWrapper = ApplyRemoveLastNFunctionParams<GetFunc, 2, VulkanGetArrayWrapperHelper<GetFunc>::template InnerHelper>;
 
 }
