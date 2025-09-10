@@ -8,3 +8,7 @@
 #include "VulkanObjectAliases.h"
 #include "VulkanGetArrayAliases.h"
 #include "DefaultVkwCheck.h"
+
+#ifdef GLFW_TRUE
+#include "GLFWwindowWrapper.h"
+#endif

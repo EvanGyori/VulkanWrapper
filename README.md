@@ -13,6 +13,7 @@ In order to increase compile-time speed, I used templates so that essentially co
 - Requires C++20 but I should be able to add support for as low as C++11 if I feel like it.
 - I only added struct and RAII object aliases for the most commonly used stuff. To add support for certain extensions, look at `include/VulkanStructAliases.h` or `include/VulkanObjectAliases.h`.
 - You must either initialize the Vulkan struct aliases using designated initializers or set the members after using the default constructor. See [Usage](#usage) for more info. This will change once I get my hands on C++26's compile-time reflection.
+- Uses Vulkan functions directly meaning the Vulkan Loader is required at compile-time. Can't DLL load at runtime.
 
 ## Usage
 
@@ -91,6 +92,16 @@ If an object fails to be created inside an RAII object, a std::runtime_error wil
 
 ```C++
 VKW_CHECK(vkEndCommandBuffer(commandBuffer));
+```
+
+### GLFW Bonus
+If GLFW is included before including `VulkanWrapper.h`, the `vkw::Surface`'s constructor will be based on `glfwCreateWindowSurface`.
+
+Also, `GLFWwindowWrapper` is provided as an RAII wrapper for creating and destroying a `GLFWwindow*`. No error handling is done if glfwCreateWindow returns a nullptr.
+
+```C++
+glfwWindowHint(...)
+vkw::GLFWwindowWrapper window(width, height, title, monitor);
 ```
 
 ### Use everything else as normal
