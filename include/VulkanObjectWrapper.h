@@ -74,7 +74,7 @@ public:
 	return *this;
     }
 
-    operator T() noexcept
+    operator T() const noexcept
     {
 	return handle;
     }
