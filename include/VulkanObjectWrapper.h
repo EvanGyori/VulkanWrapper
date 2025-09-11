@@ -108,12 +108,10 @@ public:
 
 	~InnerHelper()
 	{
-	    if (this->handle != nullptr) {
-		if constexpr(this->hasDestroyDependency) {
-		    DestroyFunc(this->destroyDependency, this->handle, nullptr);
-		} else {
-		    DestroyFunc(this->handle, nullptr);
-		}
+	    if constexpr(this->hasDestroyDependency) {
+		DestroyFunc(this->destroyDependency, this->handle, nullptr);
+	    } else {
+		DestroyFunc(this->handle, nullptr);
 	    }
 	}
 
@@ -149,11 +147,9 @@ public:
 
 	~InnerHelper()
 	{
-	    if (this->handle != nullptr) {
-		auto destroyFunc = reinterpret_cast<DestroyFuncType>(
-		    vkGetInstanceProcAddr(this->destroyDependency, DestroyFuncName));
-		destroyFunc(this->destroyDependency, this->handle, nullptr);
-	    }
+	    auto destroyFunc = reinterpret_cast<DestroyFuncType>(
+		vkGetInstanceProcAddr(this->destroyDependency, DestroyFuncName));
+	    destroyFunc(this->destroyDependency, this->handle, nullptr);
 	}
 
 	InnerHelper(InnerHelper&&) = default;
@@ -182,9 +178,7 @@ public:
 
     ~VulkanObjectWrapperNoCreateFunc()
     {
-	if (this->handle != nullptr) {
-	    DestroyFunc(this->destroyDependency, this->handle, nullptr);
-	}
+	DestroyFunc(this->destroyDependency, this->handle, nullptr);
     }
 
     VulkanObjectWrapperNoCreateFunc(VulkanObjectWrapperNoCreateFunc&&) = default;
