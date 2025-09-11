@@ -199,10 +199,10 @@ public:
     CommandBufferNoCreateFunc(
 	VkDevice device,
 	VkCommandPool commandPool,
-	VkCommandBuffer commandBuffer)
+	VkCommandBuffer handle)
 	: device(device),
 	commandPool(commandPool),
-	commandBuffer(commandBuffer)
+	handle(handle)
     {
     }
 
