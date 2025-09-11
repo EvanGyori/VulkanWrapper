@@ -37,7 +37,8 @@ VKW_RAII_WRAPPER(Instance, VkInstance, vkCreateInstance, vkDestroyInstance);
 VKW_RAII_WRAPPER(Device, VkDevice, vkCreateDevice, vkDestroyDevice);
 // VkQueue - obtained differently, no destruction needed
 VKW_RAII_WRAPPER(Semaphore, VkSemaphore, vkCreateSemaphore, vkDestroySemaphore);
-// Command Buffer - allocated in groups, freed individually or by pool
+// Command Buffer - allocated in groups, freed individually or by pool. Pass a created one to the RAII wrapper to have it freed individually automatically
+using CommandBuffer = CommandBufferNoCreateFunc;
 VKW_RAII_WRAPPER(Fence, VkFence, vkCreateFence, vkDestroyFence);
 VKW_RAII_WRAPPER(DeviceMemory, VkDeviceMemory, vkAllocateMemory, vkFreeMemory);
 VKW_RAII_WRAPPER(Buffer, VkBuffer, vkCreateBuffer, vkDestroyBuffer);

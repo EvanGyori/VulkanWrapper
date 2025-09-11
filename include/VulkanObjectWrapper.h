@@ -191,4 +191,71 @@ public:
     VulkanObjectWrapperNoCreateFunc& operator=(VulkanObjectWrapperNoCreateFunc&&) = default;
 };
 
+// Specialize for VkCommandBuffer to free a single command buffer
+class CommandBufferNoCreateFunc
+{
+public:
+    CommandBufferNoCreateFunc(nullptr_t) :
+	device(nullptr),
+	commandPool(nullptr),
+	handle(nullptr)
+    {
+    }
+
+    CommandBufferNoCreateFunc(
+	VkDevice device,
+	VkCommandPool commandPool,
+	VkCommandBuffer commandBuffer)
+	: device(device),
+	commandPool(commandPool),
+	commandBuffer(commandBuffer)
+    {
+    }
+
+    CommandBufferNoCreateFunc(const CommandBufferNoCreateFunc&) = delete;
+    CommandBufferNoCreateFunc& operator=(const CommandBufferNoCreateFunc&) = delete;
+
+    CommandBufferNoCreateFunc(CommandBufferNoCreateFunc&& rhs) noexcept :
+	device(rhs.device),
+	commandPool(rhs.commandPool),
+	handle(rhs.handle)
+    {
+	rhs.device = nullptr;
+	rhs.commandPool = nullptr;
+	rhs.handle = nullptr;
+    }
+
+    CommandBufferNoCreateFunc& operator=(CommandBufferNoCreateFunc&& rhs) noexcept
+    {
+	VkDevice tempDevice = device;
+	device = rhs.device;
+	rhs.device = tempDevice;
+
+	VkCommandPool tempCommandPool = commandPool;
+	commandPool = rhs.commandPool;
+	rhs.commandPool = tempCommandPool;
+
+	VkCommandBuffer tempHandle = handle;
+	handle = rhs.handle;
+	rhs.handle = tempHandle;
+
+	return *this;
+    }
+
+    ~CommandBufferNoCreateFunc()
+    {
+	vkFreeCommandBuffers(device, commandPool, 1, &handle);
+    }
+
+    operator VkCommandBuffer() const noexcept
+    {
+	return handle;
+    }
+
+private:
+    VkDevice device;
+    VkCommandPool commandPool;
+    VkCommandBuffer handle;
+};
+
 }
