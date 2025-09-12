@@ -95,11 +95,11 @@ public:
     class Pack
     {
     private:
-	template<typename...>
+	template<bool, typename...>
 	class Helper;
 
-	template<typename First, typename... Forward>
-	class Helper<First, Forward...>
+	template<bool Garbage, typename First, typename... Forward>
+	class Helper<Garbage, First, Forward...>
 	{
 	public:
 	    template<typename... Backward>
@@ -107,12 +107,15 @@ public:
 	    {
 	    public:
 		template<template<typename...> class T>
-		using Apply = typename Helper<Forward...>::template InnerHelper<First, Backward...>::template Apply<T>;
+		using Apply = typename Helper<true, Forward...>::template InnerHelper<First, Backward...>::template Apply<T>;
 	    };
 	};
 
-	template<>
-	class Helper<>
+	// Since explicit specialization in non-namespace scope is illegal
+	// on g++, to make the syntax significantly easier, I do partial
+	// specialization
+	template<bool Garbage>
+	class Helper<Garbage>
 	{
 	public:
 	    template<typename... Backward>
@@ -126,7 +129,7 @@ public:
 
     public:
 	template<template<typename...> class T>
-	using Apply = typename Helper<Types...>::template InnerHelper<>::template Apply<T>;
+	using Apply = typename Helper<true, Types...>::template InnerHelper<>::template Apply<T>;
     };
 };
 
