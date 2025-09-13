@@ -14,7 +14,12 @@
 namespace vkw
 {
 
+// VK_EXT_debug_utils
 using DebugUtilsMessengerCreateInfoEXT = VulkanStructWrapper<VkDebugUtilsMessengerCreateInfoEXT, VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT>;
+
+// VK_KHR_swapchain
+using PresentInfoKHR = VulkanStructWrapper<VkPresentInfoKHR, VK_STRUCTURE_TYPE_PRESENT_INFO_KHR>;
+using SwapchainCreateInfoKHR = VulkanStructWrapper<VkSwapchainCreateInfoKHR, VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR>;
 
 using ApplicationInfo = VulkanStructWrapper<VkApplicationInfo, VK_STRUCTURE_TYPE_APPLICATION_INFO>;
 using InstanceCreateInfo = VulkanStructWrapper<VkInstanceCreateInfo, VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO>;
