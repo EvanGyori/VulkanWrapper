@@ -17,16 +17,20 @@
 #pragma once
 #include "VulkanObjectWrapper.h"
 
+// The reason the string is inline extern constexpr is so that it the definition can
+// appear in multiple translational units (so I don't need a .cpp file) and so that it
+// has external linkage making it so that the template instance has external linkage (rather
+// than internal which would cause it to be instanced in every file it is included in).
 #define VKW_RAII_WRAPPER(Alias, Type, CreateFunc, DestroyFunc) \
-    constexpr const char Type ## _name[] = #Type ;\
+    inline extern constexpr const char Type ## _name[] = #Type ; \
     using Alias = VulkanObjectWrapper<Type, CreateFunc, DestroyFunc, Type ## _name>
 
 // Use when the object's create and destroy functions need to be obtained
 // through vkGetInstanceProcAddr
 #define VKW_RAII_WRAPPER_INSTANCE_EXTENSION(Alias, Type, CreateFunc, DestroyFunc) \
-    constexpr const char Type ## _name[] = #Type ;\
-    constexpr const char CreateFunc ## _name[] = #CreateFunc ;\
-    constexpr const char DestroyFunc ## _name[] = #DestroyFunc ;\
+    inline extern constexpr const char Type ## _name[] = #Type ;\
+    inline extern constexpr const char CreateFunc ## _name[] = #CreateFunc ;\
+    inline extern constexpr const char DestroyFunc ## _name[] = #DestroyFunc ;\
     using Alias = VulkanObjectWrapperInstanceExtension<Type, CreateFunc, PFN_ ## CreateFunc, CreateFunc ## _name, DestroyFunc, PFN_ ## DestroyFunc, DestroyFunc ## _name, Type ## _name>
 
 namespace vkw
