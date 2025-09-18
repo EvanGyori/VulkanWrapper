@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <algorithm>
+
 namespace vkw
 {
 
@@ -32,10 +34,7 @@ public:
 
     GLFWwindowWrapper& operator=(GLFWwindowWrapper&& rhs) noexcept
     {
-	GLFWwindow* temp = handle;
-	handle = rhs.handle;
-	rhs.handle = temp;
-
+	std::swap(handle, rhs.handle);
 	return *this;
     }
 

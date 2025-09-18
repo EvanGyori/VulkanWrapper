@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstddef>
+#include <algorithm>
 
 #include <vulkan/vulkan.h>
 
@@ -41,10 +42,7 @@ protected:
 
     DestroyDependencyBase& operator=(DestroyDependencyBase&& rhs) noexcept
     {
-	DependencyType temp = destroyDependency;
-	destroyDependency = rhs.destroyDependency;
-	rhs.destroyDependency = temp;
-
+	std::swap(destroyDependency, rhs.destroyDependency);
 	return *this;
     }
 };
@@ -66,11 +64,7 @@ public:
     VulkanObjectWrapperBase& operator=(VulkanObjectWrapperBase&& rhs) noexcept
     {
 	DestroyDependencyBase<DestroyFunc>::operator=(std::move(rhs));
-
-	T temp = handle;
-	handle = rhs.handle;
-	rhs.handle = temp;
-
+	std::swap(handle, rhs.handle);
 	return *this;
     }
 
@@ -221,18 +215,9 @@ public:
 
     CommandBufferNoCreateFunc& operator=(CommandBufferNoCreateFunc&& rhs) noexcept
     {
-	VkDevice tempDevice = device;
-	device = rhs.device;
-	rhs.device = tempDevice;
-
-	VkCommandPool tempCommandPool = commandPool;
-	commandPool = rhs.commandPool;
-	rhs.commandPool = tempCommandPool;
-
-	VkCommandBuffer tempHandle = handle;
-	handle = rhs.handle;
-	rhs.handle = tempHandle;
-
+	std::swap(device, rhs.device);
+	std::swap(commandPool, rhs.commandPool);
+	std::swap(handle, rhs.handle);
 	return *this;
     }
 
