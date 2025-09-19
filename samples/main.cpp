@@ -62,8 +62,8 @@ void run()
 {
     vkw::DebugUtilsMessengerCreateInfoEXT debuggerInfo({
 	.messageSeverity =
-	    VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-	    VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+	    //VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+	    //VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
 	    VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
 	    VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
 	.messageType =
@@ -82,21 +82,18 @@ void run()
     std::vector<const char*> extensions { "VK_EXT_debug_utils" };
 
     vkw::InstanceCreateInfo createInfo({
-	//.pNext = &debuggerInfo,
+	.pNext = &debuggerInfo,
 	.pApplicationInfo = &appInfo,
 	.enabledExtensionCount = static_cast<uint32_t>(extensions.size()),
 	.ppEnabledExtensionNames = extensions.data()
     });
 
-    //vkw::Instance instance(&createInfo);
+    vkw::Instance instance(nullptr);
+    instance = vkw::Instance(&createInfo);
 
-    //vkw::DebugUtilsMessengerEXT debugger(instance, &debuggerInfo);
+    vkw::DebugUtilsMessengerEXT debugger(nullptr);
+    debugger = vkw::DebugUtilsMessengerEXT(instance, &debuggerInfo);
 
-    std::vector<vkw::Instance> instances;
-    for (int i = 0; i < 3; ++i)
-	instances.emplace_back(&createInfo);
-
-    std::vector<vkw::Instance> instances2 = std::move(instances);
 }
 
 int main()

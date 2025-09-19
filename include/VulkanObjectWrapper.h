@@ -141,9 +141,11 @@ public:
 
 	~InnerHelper()
 	{
-	    auto destroyFunc = reinterpret_cast<DestroyFuncType>(
-		vkGetInstanceProcAddr(this->destroyDependency, DestroyFuncName));
-	    destroyFunc(this->destroyDependency, this->handle, nullptr);
+	    if (this->destroyDependency != nullptr) {
+		auto destroyFunc = reinterpret_cast<DestroyFuncType>(
+		    vkGetInstanceProcAddr(this->destroyDependency, DestroyFuncName));
+		destroyFunc(this->destroyDependency, this->handle, nullptr);
+	    }
 	}
 
 	InnerHelper(InnerHelper&&) = default;
