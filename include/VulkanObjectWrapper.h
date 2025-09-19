@@ -103,7 +103,9 @@ public:
 	~InnerHelper()
 	{
 	    if constexpr(this->hasDestroyDependency) {
-		DestroyFunc(this->destroyDependency, this->handle, nullptr);
+		if (this->destroyDependency != nullptr) {
+		    DestroyFunc(this->destroyDependency, this->handle, nullptr);
+		}
 	    } else {
 		DestroyFunc(this->handle, nullptr);
 	    }
@@ -174,7 +176,9 @@ public:
 
     ~VulkanObjectWrapperNoCreateFunc()
     {
-	DestroyFunc(this->destroyDependency, this->handle, nullptr);
+	if (this->destroyDependency != nullptr) {
+	    DestroyFunc(this->destroyDependency, this->handle, nullptr);
+	}
     }
 
     VulkanObjectWrapperNoCreateFunc(VulkanObjectWrapperNoCreateFunc&&) = default;
@@ -225,7 +229,9 @@ public:
 
     ~CommandBufferNoCreateFunc()
     {
-	vkFreeCommandBuffers(device, commandPool, 1, &handle);
+	if (device != nullptr) {
+	    vkFreeCommandBuffers(device, commandPool, 1, &handle);
+	}
     }
 
     operator VkCommandBuffer() const noexcept
